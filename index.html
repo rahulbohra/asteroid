@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <title>Locate Asteroid</title>
+        <link rel="stylesheet" href="css/cartodb.css" />
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+        <link rel="stylesheet" href="css/my.css" />
+        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+        <script src="js/my.js"></script>
+		<script src="js/cartodb.js"></script>
+        <!-- User-generated css -->
+		<style type="text/css">
+			html, body { height: 100%; padding: 0; margin: 0; }
+			#map { position:absolute; width:100%; top:0; right:0; bottom:0; left:0; }
+        </style>
+        <!-- User-generated js -->
+        <script>
+			try
+			{
+				$(function(){
+				});
+			}
+			catch (error)
+			{
+				console.error("Your javascript has an error: " + error);
+			}
+        </script>
+    </head>
+    <body>
+        <!-- Home -->
+        <div data-role="page" id="page1">
+            <div data-role="content">
+                <div data-theme="a" data-role="header" data-position="fixed">
+                    <h3>Locate Asteroid</h3>
+                <a data-role="button" data-transition="slidefade" data-theme="a" href="http://www.facebook.com/spaceman4walk" class="ui-btn-left">
+                    Facebook
+                </a>
+                <a data-role="button" data-transition="slidefade" data-theme="a" href="https://www.twitter.com/spaceman4walk" class="ui-btn-right">
+                    Twitter
+                </a>
+                </div>
+                <div id="map"></div>
+            </div>
+            <div data-theme="a" data-role="footer" data-position="fixed">
+                <h3>
+                    Rahul Bohra
+                </h3>
+            </div>
+        </div>
+    </body>
+	<script>
+	function get_url_params(conversion)
+	{
+		conversion = conversion || {};
+		var tokens = location.search.slice(1).split('&');
+		var params = {};
+		for(var i = 0; i < tokens.length; ++i)
+		{
+			var tk = tokens[i].split('=');
+			var fn = conversion[tk[0]] || function(v) { return v };
+			if(tk.length === 2)
+			{
+				params[tk[0]] = fn(decodeURIComponent(tk[1]));
+			}
+		}
+		return params;
+	}
+	
+	$(document).ready(function()
+	{
+		var bool_fn = function(v)
+		{
+			return v == 'true'
+		}
+		, is_custom_install = false
+		, logo_fn = function(v)
+		{
+			return ("free" != "coronelli" || is_custom_install) ? true : v == 'true'
+		};
+		
+		var opt = get_url_params(
+		{
+		  'search': bool_fn,
+		  'title': bool_fn,
+		  'description': bool_fn,
+		  'shareable': bool_fn
+		});
+		
+		cartodb.createVis('map', 'http://osm2.cartodb.com/api/v1/viz/meteoritessize/viz', opt, function(vis)
+		{
+		  // add here your code
+		});
+	});
+    </script>
+</html>
